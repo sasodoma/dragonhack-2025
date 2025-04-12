@@ -57,7 +57,7 @@ export default function Detail() {
         </button>
       )}
     </div>
-    :<div>
+    :<div className="letter-container">
       <Link to="/" className="back-button">&larr; Back</Link>
 
       <div className="letter-card">

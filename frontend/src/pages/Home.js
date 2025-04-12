@@ -28,8 +28,8 @@ export default function Home() {
 
   return (
     <div className="home-container">
-      <h1 className="title">Hi, Naomi!</h1>
-      <p className="subtitle">Your Classes</p>
+      <h1 className="title">Hi, Mirko!</h1>
+      <p>Your score: </p>
       <div className="card-list">
         {items.map((item) => (
           <Link to={`/item/${item.id}`} key={item.id} className="card-link">
@@ -37,7 +37,7 @@ export default function Home() {
               <img src={item.type === 1 ? LetterIcon : FingerIcon} alt="class" className="card-image" />
               <div className="card-content">
                 <h2 className="card-title">{item.title}</h2>
-                <p className="card-sub">Naomi</p>
+                <p className="card-sub">{item.type === 1 ? "Type" : "Feel"}</p>
               </div>
             </div>
           </Link>

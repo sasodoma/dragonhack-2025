@@ -19,7 +19,12 @@
     color: #4a90e2;
     align-self: flex-start;
     margin-bottom: 16px;
-    font-size: 14px;
+    font-size: 20px;
+    margin-left: 5px;
+    margin-top: 10px;
+    background-color: lightgray;
+    border-radius: 3px;
+    padding:5px
   }
   
   .letter-card {
@@ -56,6 +61,7 @@
   
   .guess-input {
     height: 30px;
+    font-size: 95%;
   }
 
   /* Mobile adjustments */
@@ -76,6 +82,18 @@
     .guess-input {
       height: 30px;
       width: 80%;
+    }
+    .back-button {
+      text-decoration: none;
+      color: #4a90e2;
+      align-self: flex-start;
+      margin-bottom: 16px;
+      font-size: 20px;
+      margin-left: 5px;
+      margin-top: 10px;
+      background-color: lightgray;
+      border-radius: 3px;
+      padding:5px
     }
   }
   
