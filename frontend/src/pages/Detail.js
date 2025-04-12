@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import "../styles/Detail.css";
 
 export default function Detail() {
   const { id } = useParams();
@@ -47,7 +48,7 @@ export default function Detail() {
       ) : (
         <button
           className="confirm-button"
-          onClick={() => navigate("/some-other-page")}
+          onClick={() => navigate("/results")}
         >
           Confirm & Continue
         </button>

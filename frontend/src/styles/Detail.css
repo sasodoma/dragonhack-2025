@@ -1,16 +1,23 @@
 .letter-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  
     padding: 24px;
     max-width: 480px;
     margin: auto;
+    min-height: 100vh;
+  
     font-family: Arial, sans-serif;
     text-align: center;
+    box-sizing: border-box;
   }
   
   .back-button {
     text-decoration: none;
     color: #4a90e2;
-    display: block;
-    text-align: left;
+    align-self: flex-start;
     margin-bottom: 16px;
     font-size: 14px;
   }
@@ -21,10 +28,11 @@
     border-radius: 16px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     margin-bottom: 24px;
+    width: 100%;
   }
   
   .letter {
-    font-size: 48px;
+    font-size: 64px;
     font-weight: bold;
     margin-top: 16px;
   }
@@ -38,10 +46,28 @@
     border-radius: 12px;
     font-size: 16px;
     cursor: pointer;
+    width: 100%;
   }
   
   .next-button:hover,
   .confirm-button:hover {
     background-color: #357ABD;
+  }
+  
+  /* Mobile adjustments */
+  @media (max-width: 480px) {
+    .letter {
+      font-size: 48px;
+    }
+  
+    .letter-card {
+      padding: 24px;
+    }
+  
+    .next-button,
+    .confirm-button {
+      font-size: 15px;
+      padding: 12px;
+    }
   }
   
