@@ -9,6 +9,7 @@ export default function Detail() {
   const navigate = useNavigate();
   const [input, setInput] = useState("");
   const inputRef = useRef(null);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     async function fetchChallenge() {
@@ -35,6 +36,7 @@ export default function Detail() {
   const isLast = currentIndex === challenge.letters.length - 1;
   console.log(input);
   return ( 
+    // Challenge type 1
     ( challenge.type === 1 ?
     <div className="letter-container">
       <Link to="/" className="back-button">&larr; Back</Link>
@@ -51,12 +53,13 @@ export default function Detail() {
       ) : (
         <button
           className="confirm-button"
-          onClick={() => navigate("/results")}
+          onClick={() => navigate("/results", { state: { score } })}
         >
           Confirm & Continue
         </button>
       )}
     </div>
+    // Challenge type 2
     :<div className="letter-container">
       <Link to="/" className="back-button">&larr; Back</Link>
 
@@ -71,6 +74,10 @@ export default function Detail() {
           () =>{ 
             setCurrentIndex((prev) => prev + 1);
             setInput(inputRef.current.value);
+            if(inputRef.current.value.toLowerCase() === challenge.letters[currentIndex]) {
+              setScore((prev) => prev + 1);
+              console.log("Correct" + score);
+            }
           }
         }>
           Next
@@ -78,7 +85,7 @@ export default function Detail() {
       ) : (
         <button
           className="confirm-button"
-          onClick={() => navigate("/results")}
+          onClick={() => navigate("/results", { state: { score } })}
         >
           Confirm & Continue
         </button>
