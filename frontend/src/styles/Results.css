@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(to bottom right, #e0f2fe, #ede9fe);
+    background: linear-gradient(to bottom right, #ffffff, #A2DED0);
     padding: 2rem;
   }
   
@@ -20,7 +20,7 @@
   .results-title {
     font-size: 2rem;
     font-weight: 700;
-    color: #4f46e5;
+    color: #111827;
     margin-bottom: 1rem;
   }
   
@@ -39,7 +39,7 @@
   
   .results-button {
     display: inline-block;
-    background-color: #6366f1;
+    background-color: #A2DED0;
     color: white;
     padding: 0.75rem 1.5rem;
     border-radius: 9999px;
@@ -49,6 +49,6 @@
   }
   
   .results-button:hover {
-    background-color: #4f46e5;
+    background-color: #6b7280;
   }
   

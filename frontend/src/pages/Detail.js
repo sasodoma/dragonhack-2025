@@ -3,11 +3,10 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import "../styles/Detail.css";
 
 export default function Detail() {
-  const { id } = useParams(); // gets challenge ID from URL
+  const { id } = useParams();
   const [challenge, setChallenge] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
-  const [input, setInput] = useState("");
   const inputRef = useRef(null);
   const [score, setScore] = useState(0);
   const [isCorrect, setIsCorrect] = useState(0);
@@ -34,13 +33,38 @@ export default function Detail() {
     fetchChallenge();
   }, [id]);
 
+  const isLast = challenge && currentIndex === challenge.letters.length - 1;
+
+  const handleAnswer = () => {
+    const userInput = inputRef.current.value.toLowerCase();
+    const correctAnswer = challenge.letters[currentIndex];
+    const isAnswerCorrect = userInput === correctAnswer;
+
+    setIsCorrect(isAnswerCorrect ? 1 : -1);
+    if (isAnswerCorrect) {
+      correctSound.current.play();
+      setScore((prev) => prev + 1);
+    } else {
+      incorrectSound.current.play();
+    }
+
+    setTimeout(() => {
+      setIsCorrect(null);
+      inputRef.current.value = "";
+
+      if (!isLast) {
+        setCurrentIndex((prev) => prev + 1);
+      } else {
+        navigate("/results", { state: { score: isAnswerCorrect ? score + 1 : score } });
+      }
+    }, 500);
+  };
+
   if (!challenge) {
     return <p>Loading challenge...</p>;
   }
 
-  const isLast = currentIndex === challenge.letters.length - 1;
-
-  return ( 
+  return (
     challenge.type === 1 ? (
       <div className="letter-container">
         <Link to="/" className="back-button">&larr; Back</Link>
@@ -79,44 +103,12 @@ export default function Detail() {
           />
         </div>
 
-        {!isLast ? (
-          <button
-            className="next-button"
-            onClick={() => {
-              const userInput = inputRef.current.value.toLowerCase();
-              setInput(userInput);
-              
-              const correctAnswer = challenge.letters[currentIndex];
-              const isAnswerCorrect = userInput === correctAnswer;
-              
-              // Set correctness and play corresponding sound
-              setIsCorrect(isAnswerCorrect ? 1 : -1);
-              if (isAnswerCorrect) {
-                correctSound.current.play();
-              } else {
-                incorrectSound.current.play();
-              }
-
-              setTimeout(() => {
-                setIsCorrect(null);
-                setCurrentIndex((prev) => prev + 1);
-                inputRef.current.value = "";
-                if (isAnswerCorrect) {
-                  setScore((prev) => prev + 1);
-                }
-              }, 500);
-            }}
-          >
-            Next
-          </button>
-        ) : (
-          <button
-            className="confirm-button"
-            onClick={() => navigate("/results", { state: { score } })}
-          >
-            Confirm & Continue
-          </button>
-        )}
+        <button
+          className={isLast ? "confirm-button" : "next-button"}
+          onClick={handleAnswer}
+        >
+          {isLast ? "Confirm & Continue" : "Next"}
+        </button>
       </div>
     )
   );
