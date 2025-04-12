@@ -10,6 +10,11 @@ export default function Detail() {
   const [input, setInput] = useState("");
   const inputRef = useRef(null);
   const [score, setScore] = useState(0);
+  const [isCorrect, setIsCorrect] = useState(0);
+
+  // Sound refs
+  const correctSound = useRef(new Audio("/correct.mp3"));
+  const incorrectSound = useRef(new Audio("/incorrect.mp3"));
 
   useEffect(() => {
     async function fetchChallenge() {
@@ -34,62 +39,85 @@ export default function Detail() {
   }
 
   const isLast = currentIndex === challenge.letters.length - 1;
-  console.log(input);
+
   return ( 
-    // Challenge type 1
-    ( challenge.type === 1 ?
-    <div className="letter-container">
-      <Link to="/" className="back-button">&larr; Back</Link>
+    challenge.type === 1 ? (
+      <div className="letter-container">
+        <Link to="/" className="back-button">&larr; Back</Link>
 
-      <div className="letter-card">
-        <h2>Letter {currentIndex + 1}</h2>
-        <p className="letter">{challenge.letters[currentIndex]}</p>
+        <div className="letter-card">
+          <h2>Letter {currentIndex + 1}</h2>
+          <p className="letter">{challenge.letters[currentIndex]}</p>
+        </div>
+
+        {!isLast ? (
+          <button className="next-button" onClick={() => setCurrentIndex((prev) => prev + 1)}>
+            Next
+          </button>
+        ) : (
+          <button
+            className="confirm-button"
+            onClick={() => navigate("/results", { state: { score } })}
+          >
+            Confirm & Continue
+          </button>
+        )}
       </div>
+    ) : (
+      <div className="letter-container">
+        <Link to="/" className="back-button">&larr; Back</Link>
 
-      {!isLast ? (
-        <button className="next-button" onClick={() => setCurrentIndex((prev) => prev + 1)}>
-          Next
-        </button>
-      ) : (
-        <button
-          className="confirm-button"
-          onClick={() => navigate("/results", { state: { score } })}
-        >
-          Confirm & Continue
-        </button>
-      )}
-    </div>
-    // Challenge type 2
-    :<div className="letter-container">
-      <Link to="/" className="back-button">&larr; Back</Link>
+        <div className="letter-card">
+          <h2>Letter {currentIndex + 1}</h2>
+          <p className="letter">Guess</p>
+          <input
+            className={`guess-input ${
+              isCorrect === 1 ? "correct" : isCorrect === -1 ? "incorrect" : "neutral"
+            }`}
+            id="inputBox"
+            ref={inputRef}
+          />
+        </div>
 
-      <div className="letter-card">
-        <h2>Letter {currentIndex + 1}</h2>
-        <p className="letter">Guess</p>
-        <input className="guess-input" id="inputBox" ref={inputRef}></input>
+        {!isLast ? (
+          <button
+            className="next-button"
+            onClick={() => {
+              const userInput = inputRef.current.value.toLowerCase();
+              setInput(userInput);
+              
+              const correctAnswer = challenge.letters[currentIndex];
+              const isAnswerCorrect = userInput === correctAnswer;
+              
+              // Set correctness and play corresponding sound
+              setIsCorrect(isAnswerCorrect ? 1 : -1);
+              if (isAnswerCorrect) {
+                correctSound.current.play();
+              } else {
+                incorrectSound.current.play();
+              }
+
+              setTimeout(() => {
+                setIsCorrect(null);
+                setCurrentIndex((prev) => prev + 1);
+                inputRef.current.value = "";
+                if (isAnswerCorrect) {
+                  setScore((prev) => prev + 1);
+                }
+              }, 500);
+            }}
+          >
+            Next
+          </button>
+        ) : (
+          <button
+            className="confirm-button"
+            onClick={() => navigate("/results", { state: { score } })}
+          >
+            Confirm & Continue
+          </button>
+        )}
       </div>
-
-      {!isLast ? (
-        <button className="next-button" onClick={
-          () =>{ 
-            setCurrentIndex((prev) => prev + 1);
-            setInput(inputRef.current.value);
-            if(inputRef.current.value.toLowerCase() === challenge.letters[currentIndex]) {
-              setScore((prev) => prev + 1);
-              console.log("Correct" + score);
-            }
-          }
-        }>
-          Next
-        </button>
-      ) : (
-        <button
-          className="confirm-button"
-          onClick={() => navigate("/results", { state: { score } })}
-        >
-          Confirm & Continue
-        </button>
-      )}
-    </ div>)
+    )
   );
 }

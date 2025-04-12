@@ -9,8 +9,11 @@ const images = ["/assets/math.png", "/assets/science.png", "/assets/music.png", 
 
 export default function Home() {
   const [items, setItems] = useState([]);
+  const [score, setScore] = useState(0);
+
 
   useEffect(() => {
+    // Get challenges
     fetch("http://localhost:5000/get-all-challenges")
       .then((res) => res.json())
       .then((data) => {
@@ -24,12 +27,24 @@ export default function Home() {
         setItems(formatted);
       })
       .catch((error) => console.error("Failed to fetch challenges", error));
+  
+    // Get user score
+    fetch("http://localhost:5000/get-user?username=mirko")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.score !== undefined) {
+          setScore(data.score);
+        }
+      })
+      .catch((error) => console.error("Failed to fetch user data", error));
   }, []);
+  
 
   return (
     <div className="home-container">
       <h1 className="title">Hi, Mirko!</h1>
-      <p>Your score: </p>
+      <p>Your score: <strong>{score}</strong></p>
+
       <div className="card-list">
         {items.map((item) => (
           <Link to={`/item/${item.id}`} key={item.id} className="card-link">

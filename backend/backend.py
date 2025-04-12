@@ -46,6 +46,19 @@ def get_all_challenges():
     all_challenges = list(challenges.find({}, {"_id": 0}))  # Exclude MongoDB _id from results
     return jsonify(all_challenges)
 
+@app.route("/get-user", methods=["GET"])
+def get_user():
+    username = request.args.get("username")
+    if not username:
+        return jsonify({"error": "Username not provided"}), 400
+
+    user = db["users"].find_one({"username": username}, {"_id": 0})
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    return jsonify(user)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
