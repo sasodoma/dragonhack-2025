@@ -1,18 +1,22 @@
-#include <Arduino.h>
+/* Firmware for the Fingertip Braille Display
+ * Authors: Piškotki
+ */
 
-// put function declarations here:
-int myFunction(int, int);
+#include <Arduino.h>
+#include "gpio.h"
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(115200);
+  Serial.println("Starting Fingertip Braille Display...");
+  initGPIO(); // Initialize GPIO pins
+  Serial.println("GPIO initialized.");
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  uint8_t presses = getButtonPresses(); // Get button presses
+  if (presses) {
+    Serial.print("Button presses detected: ");
+    Serial.println(presses, BIN); // Print button presses in binary format
+  }
+  delay(100); // Delay for a short period to avoid flooding the serial output
 }
