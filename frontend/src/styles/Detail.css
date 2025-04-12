@@ -54,6 +54,10 @@
     background-color: #357ABD;
   }
   
+  .guess-input {
+    height: 30px;
+  }
+
   /* Mobile adjustments */
   @media (max-width: 480px) {
     .letter {
@@ -68,6 +72,10 @@
     .confirm-button {
       font-size: 15px;
       padding: 12px;
+    }
+    .guess-input {
+      height: 30px;
+      width: 80%;
     }
   }
   
