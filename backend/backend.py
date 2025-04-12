@@ -38,20 +38,16 @@ def get_challenge_1():
     challenge = random.choice(all_challenges)
     return jsonify({
         "challenge_id": challenge["challenge_id"],
-        "letters": challenge["letters"]
+        "letters": challenge["letters"],
+        "type": challenge["type"],
+
     })
 
-@app.route("/get-challenge-2", methods=["GET"])
-def get_challenge_2():
-    all_challenges = list(challenges.find())
-    if not all_challenges:
-        return jsonify({"error": "No challenges found"}), 404
+@app.route("/get-all-challenges", methods=["GET"])
+def get_all_challenges():
+    all_challenges = list(challenges.find({}, {"_id": 0}))  # Exclude MongoDB _id from results
+    return jsonify(all_challenges)
 
-    challenge = random.choice(all_challenges)
-    return jsonify({
-        "challenge_id": challenge["challenge_id"],
-        "letters": challenge["letters"]
-    })
 
 if __name__ == "__main__":
     app.run(debug=True)
