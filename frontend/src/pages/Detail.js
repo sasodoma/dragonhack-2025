@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import "../styles/Detail.css";
 
 export default function Detail() {
-  const { id } = useParams();
+  const { id } = useParams(); // gets challenge ID from URL
   const [challenge, setChallenge] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
@@ -11,12 +11,12 @@ export default function Detail() {
   useEffect(() => {
     async function fetchChallenge() {
       try {
-        const response = await fetch("http://localhost:5000/get-challenge-1");
+        const response = await fetch(`http://localhost:5000/get-challenge/${id}`);
         const data = await response.json();
-        if (data.challenge_id) {
+        if (response.ok && data.challenge_id) {
           setChallenge(data);
         } else {
-          console.error("Challenge not found");
+          console.error("Challenge not found or invalid response");
         }
       } catch (err) {
         console.error("Error fetching challenge:", err);
@@ -24,7 +24,7 @@ export default function Detail() {
     }
 
     fetchChallenge();
-  }, []);
+  }, [id]);
 
   if (!challenge) {
     return <p>Loading challenge...</p>;

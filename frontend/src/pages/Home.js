@@ -1,15 +1,28 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Home.css";
 
-const items = [
-  { id: 1, title: "Mathematics - Class 1A", color: "#FFE066", image: "/assets/math.png" },
-  { id: 2, title: "Science - Class 6C", color: "#A2DED0", image: "/assets/science.png" },
-  { id: 3, title: "Music - Class 4B", color: "#E6EE9C", image: "/assets/music.png" },
-  { id: 4, title: "Sport - Class 1C", color: "#FF6B6B", image: "/assets/sport.png" },
-  { id: 5, title: "English - Class 1A", color: "#FFD54F", image: "/assets/english.png" },
-];
+const colors = ["#FFE066", "#A2DED0", "#E6EE9C", "#FF6B6B", "#FFD54F"];
+const images = ["/assets/math.png", "/assets/science.png", "/assets/music.png", "/assets/sport.png", "/assets/english.png"];
 
 export default function Home() {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/get-all-challenges")
+      .then((res) => res.json())
+      .then((data) => {
+        const formatted = data.map((challenge, index) => ({
+          id: challenge.challenge_id,
+          title: `Challenge ${challenge.challenge_id}`,
+          color: colors[index % colors.length],
+          image: images[index % images.length],
+        }));
+        setItems(formatted);
+      })
+      .catch((error) => console.error("Failed to fetch challenges", error));
+  }, []);
+
   return (
     <div className="home-container">
       <h1 className="title">Hi, Naomi!</h1>
