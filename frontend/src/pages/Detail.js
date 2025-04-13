@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import BluetoothManager from "../BluetoothManager"; // Make sure this path is correct
 import "../styles/Detail.css";
 
 export default function Detail() {
@@ -29,9 +30,20 @@ export default function Detail() {
         console.error("Error fetching challenge:", err);
       }
     }
-
+  
     fetchChallenge();
+  
+    // Try auto-connect to known device (won’t prompt the user)
+    BluetoothManager.connect(true);
   }, [id]);
+
+  // Send letter on index change if type is 2
+  useEffect(() => {
+    if (challenge?.type === 2) {
+      const currentLetter = challenge.letters[currentIndex];
+      BluetoothManager.sendLetter(currentLetter);
+    }
+  }, [currentIndex, challenge]);
 
   const isLast = challenge && currentIndex === challenge.letters.length - 1;
 
