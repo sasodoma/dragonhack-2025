@@ -107,8 +107,8 @@ export default function Detail() {
         <Link to="/" className="back-button">&larr; Back</Link>
 
         <div className="letter-card">
-          <h2>Letter {currentIndex + 1}</h2>
-          <p className="letter">Guess</p>
+        <h2 style={{color: "#444444"}}>Letter {currentIndex + 1}</h2>
+        <p className="letter">Read the letter</p>
           <input
             className={`guess-input ${
               isCorrect === 1 ? "correct" : isCorrect === -1 ? "incorrect" : "neutral"

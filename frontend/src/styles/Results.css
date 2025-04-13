@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(to bottom right, #ffffff, #A2DED0);
+    background: #ffffff;
     padding: 2rem;
   }
   
@@ -28,6 +28,7 @@
     font-size: 4rem;
     font-weight: 800;
     color: #111827;
+    margin-top: 1rem;
     margin-bottom: 1rem;
   }
   
@@ -39,13 +40,12 @@
   
   .results-button {
     display: inline-block;
-    background-color: #A2DED0;
+    background-color: #89d8a2;
     color: white;
     padding: 0.75rem 1.5rem;
     border-radius: 9999px;
     font-weight: 600;
     text-decoration: none;
-    transition: background-color 0.2s ease-in-out;
   }
   
   .results-button:hover {
