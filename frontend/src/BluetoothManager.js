@@ -5,6 +5,7 @@ class BluetoothManager {
   device = null;
   server = null;
   characteristic = null;
+  onReceive = null; // Custom callback you can set from outside
 
   async connect(auto = false) {
     try {
@@ -27,9 +28,25 @@ class BluetoothManager {
       this.server = await this.device.gatt.connect();
       const service = await this.server.getPrimaryService(DOTS_SERVICE_UUID);
       this.characteristic = await service.getCharacteristic(DOTS_CHARACTERISTIC_UUID);
-      console.log("✅ Bluetooth connected");
+
+      // Start notifications and attach listener
+      await this.characteristic.startNotifications();
+      this.characteristic.addEventListener("characteristicvaluechanged", this.handleIncomingData.bind(this));
+
+      console.log("✅ Bluetooth connected and listening for data");
     } catch (error) {
       console.error("❌ Bluetooth connection failed:", error);
+    }
+  }
+
+  handleIncomingData(event) {
+    const value = event.target.value;
+    const decoder = new TextDecoder();
+    const letter = decoder.decode(value);
+    console.log("📥 Received letter:", letter);
+
+    if (this.onReceive) {
+      this.onReceive(letter);
     }
   }
 

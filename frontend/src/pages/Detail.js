@@ -33,11 +33,55 @@ export default function Detail() {
     fetchChallenge();
   }, [id]);
 
+  // Send the letter to the Bluetooth device if challenge type is 2
   useEffect(() => {
     if (challenge?.type === 2 && challenge.letters[currentIndex]) {
       BluetoothManager.sendLetter(challenge.letters[currentIndex]);
     }
   }, [currentIndex, challenge]);
+
+  // Listen for incoming Bluetooth letters if challenge type is 1
+  useEffect(() => {
+    if (challenge?.type === 1) {
+      BluetoothManager.onReceive = (letter) => {
+        console.log("📥 Received letter from Bluetooth:", letter);
+        const expected = challenge.letters[currentIndex];
+        const isAnswerCorrect = letter.toLowerCase() === expected;
+  
+        setIsCorrect(isAnswerCorrect ? 1 : -1);
+        if (isAnswerCorrect) {
+          correctSound.current.play();
+          setScore((prev) => prev + 1);
+        } else {
+          incorrectSound.current.play();
+        }
+
+        setTimeout(() => {
+          setIsCorrect(null);
+  
+          if (currentIndex < challenge.letters.length - 1) {
+            setCurrentIndex((prev) => prev + 1);
+            
+          } else {
+            BluetoothManager.sendLetter("0");
+            navigate("/results", { state: { score: isAnswerCorrect ? score + 1 : score } });
+          }
+        }, 500);
+      };
+    }
+  
+    return () => {
+      BluetoothManager.onReceive = null;
+    };
+  }, [challenge, currentIndex, navigate, score]);
+  
+  useEffect(() => {
+    if (challenge && challenge.type === 1)
+    {
+      const audio = new Audio("/Alphabet/" + challenge.letters[currentIndex] + ".wav");
+      audio.play();
+    }
+  }, [challenge, currentIndex]);
 
   const isLast = challenge && currentIndex === challenge.letters.length - 1;
 
@@ -61,7 +105,6 @@ export default function Detail() {
       if (!isLast) {
         setCurrentIndex((prev) => prev + 1);
       } else {
-        // Send "0" if type is 2
         if (challenge.type === 2) {
           BluetoothManager.sendLetter("0");
         }
