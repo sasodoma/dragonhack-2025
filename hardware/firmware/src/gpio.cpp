@@ -2,8 +2,9 @@
 #include "gpio.h"
 
 /**** Pin numbers ****/
-uint8_t dotPins[] = {4, 16, 17, 5, 18, 19};
-uint8_t dotButtonPins[] = {33, 25, 26, 12, 14, 27};
+const uint8_t dotPins[] = {4, 16, 17, 19, 18, 5};
+const uint8_t dotButtonPins[] = {33, 25, 26, 12, 14, 27};
+const uint8_t enterButtonPin = 32;
 
 void initGPIO() {
     // Set all dot pins as output and set them to LOW
@@ -16,6 +17,7 @@ void initGPIO() {
     for (int i = 0; i < 6; i++) {
         pinMode(dotButtonPins[i], INPUT_PULLUP);
     }
+    pinMode(enterButtonPin, INPUT_PULLUP); // Enter button pin
 }
 
 void setDot(int dot, bool state) {
@@ -83,4 +85,16 @@ uint8_t getButtonPresses() {
     uint8_t presses = currentStates & ~lastStates; // Detect new presses
     lastStates = currentStates; // Update last states
     return presses;
+}
+
+bool getEnterState() {
+    return digitalRead(enterButtonPin) == LOW; // Assuming pin 32 is used for the enter button
+}
+
+bool getEnterPress() {
+    static bool lastState = false;
+    bool currentState = getEnterState();
+    bool press = (currentState == true && lastState == false); // Detect new press
+    lastState = currentState; // Update last state
+    return press;
 }

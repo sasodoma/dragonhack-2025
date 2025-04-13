@@ -103,4 +103,24 @@ uint8_t getButtonStates();
  */
 uint8_t getButtonPresses();
 
+/**
+ * @brief Checks if the enter button is pressed.
+ * 
+ * This function checks the state of the enter button and returns true if it is pressed,
+ * and false otherwise.
+ * 
+ * @return bool True if the enter button is pressed, false otherwise.
+ */
+bool getEnterState();
+
+/**
+ * @brief Checks if the enter button was pressed.
+ * 
+ * This function checks the state of the enter button and returns true if it was pressed,
+ * and false otherwise.
+ * 
+ * @return bool True if the enter button was pressed, false otherwise.
+ */
+bool getEnterPress();
+
 #endif // GPIO_H_INCLUDED
