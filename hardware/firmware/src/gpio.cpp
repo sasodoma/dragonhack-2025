@@ -2,8 +2,8 @@
 #include "gpio.h"
 
 /**** Pin numbers ****/
-const uint8_t dotPins[] = {4, 16, 17, 19, 18, 5};
-const uint8_t dotButtonPins[] = {33, 25, 26, 12, 14, 27};
+const uint8_t dotPins[] = {5, 18, 19, 17, 16, 4};
+const uint8_t dotButtonPins[] = {27, 14, 12, 26, 25, 33};
 const uint8_t enterButtonPin = 32;
 
 void initGPIO() {
@@ -46,6 +46,10 @@ void toggleDot(int dot) {
 }
 
 void setDots(uint8_t states) {
+    if (states == 0) {
+        setDots(0b111111);
+        delay(50);
+    }
     for (int i = 0; i < 6; i++) {
         digitalWrite(dotPins[i], (states & (1 << i)) ? HIGH : LOW);
     }
