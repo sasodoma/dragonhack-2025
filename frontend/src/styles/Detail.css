@@ -1,18 +1,31 @@
 .letter-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  
     padding: 24px;
     max-width: 480px;
     margin: auto;
+    min-height: 100vh;
+  
     font-family: Arial, sans-serif;
     text-align: center;
+    box-sizing: border-box;
+    
   }
   
   .back-button {
     text-decoration: none;
     color: #4a90e2;
-    display: block;
-    text-align: left;
+    align-self: flex-start;
     margin-bottom: 16px;
-    font-size: 14px;
+    font-size: 20px;
+    margin-left: 5px;
+    margin-top: 10px;
+    background-color: lightgray;
+    border-radius: 3px;
+    padding:5px
   }
   
   .letter-card {
@@ -21,10 +34,11 @@
     border-radius: 16px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     margin-bottom: 24px;
+    width: 100%;
   }
   
   .letter {
-    font-size: 48px;
+    font-size: 64px;
     font-weight: bold;
     margin-top: 16px;
   }
@@ -38,10 +52,66 @@
     border-radius: 12px;
     font-size: 16px;
     cursor: pointer;
+    width: 100%;
   }
   
   .next-button:hover,
   .confirm-button:hover {
     background-color: #357ABD;
+  }
+  
+  .guess-input {
+    height: 30px;
+    font-size: 95%;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 480px) {
+    .letter {
+      font-size: 48px;
+    }
+  
+    .letter-card {
+      padding: 24px;
+    }
+  
+    .next-button,
+    .confirm-button {
+      font-size: 15px;
+      padding: 12px;
+    }
+    .guess-input {
+      height: 30px;
+      width: 80%;
+    }
+    .back-button {
+      text-decoration: none;
+      color: #4a90e2;
+      align-self: flex-start;
+      margin-bottom: 16px;
+      font-size: 20px;
+      margin-left: 5px;
+      margin-top: 10px;
+      background-color: lightgray;
+      border-radius: 3px;
+      padding:5px
+    }
+    .guess-input.correct {
+      border: 2px solid #4CAF50;
+      background-color: #e8f5e9;
+      transition: background-color 0.3s ease;
+    }
+    
+    .guess-input.incorrect {
+      border: 2px solid #f44336;
+      background-color: #ffebee;
+      transition: background-color 0.3s ease;
+    }
+    .guess-input.neutral {
+      border: 2px solid #cccccc;
+      background-color: #ffffff;
+      transition: background-color 0.3s ease;
+    }
+    
   }
   

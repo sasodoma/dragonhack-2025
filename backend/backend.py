@@ -29,24 +29,35 @@ def submit_answer():
     is_correct = letter_doc["braille"] == braille_input
     return jsonify({"correct": is_correct})
 
-@app.route("/get-challenge-1", methods=["GET"])
-def get_challenge_1():
-    all_challenges = list(challenges.find())
-    if not all_challenges:
-        return jsonify({"error": "No challenges found"}), 404
+@app.route("/get-challenge/<int:challenge_id>", methods=["GET"])
+def get_challenge(challenge_id):
+    challenge = challenges.find_one({"challenge_id": challenge_id})
+    if not challenge:
+        return jsonify({"error": "Challenge not found"}), 404
 
-    challenge = random.choice(all_challenges)
     return jsonify({
         "challenge_id": challenge["challenge_id"],
         "letters": challenge["letters"],
         "type": challenge["type"],
-
     })
 
 @app.route("/get-all-challenges", methods=["GET"])
 def get_all_challenges():
     all_challenges = list(challenges.find({}, {"_id": 0}))  # Exclude MongoDB _id from results
     return jsonify(all_challenges)
+
+@app.route("/get-user", methods=["GET"])
+def get_user():
+    username = request.args.get("username")
+    if not username:
+        return jsonify({"error": "Username not provided"}), 400
+
+    user = db["users"].find_one({"username": username}, {"_id": 0})
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    return jsonify(user)
+
 
 
 if __name__ == "__main__":
