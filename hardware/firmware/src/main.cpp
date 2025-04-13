@@ -2,6 +2,7 @@
 
 #include <ArduinoBLE.h>
 #include "gpio.h"
+#include "braille.h"
 
 // BLE UUIDs for services and characteristics
 #define DOTS_SERVICE_UUID             "fc2d7374-8a34-4927-88fd-d85d70c3f361"
@@ -71,6 +72,7 @@ void loop(){
       Serial.print("Button presses detected: ");
       Serial.println(presses, BIN); // Print button presses in binary format
       buttonCharacteristic.writeValue(presses); // Notify the central device about button presses
+      toggleDots(presses); // Toggle the corresponding dots
     }
     vTaskDelay(100);
   }
@@ -79,17 +81,23 @@ void loop(){
 
 void onDotsCharacteristicWrite(BLEDevice central, BLECharacteristic characteristic) {
   // Read the value from the characteristic and set the dots accordingly
-  uint8_t states = characteristic.value()[0];
-  setDots(states);
+  char letter = characteristic.value()[0];
+  uint8_t states = charToBraille(letter); // Convert character to braille
+  setDots(charToBraille(states)); // Convert character to braille and set the dots
   Serial.print("Dots set to: ");
+  Serial.print(letter); // Print the character received
+  Serial.print(", ");
   Serial.println(states, BIN); // Print the state of the dots in binary format
 }
 
 void onDotsCharacteristicRead(BLEDevice central, BLECharacteristic characteristic) {
   // Read the current state of the dots and send it back to the central device
   uint8_t states = getDots();
-  characteristic.writeValue(states);
+  char letter = brailleToChar(states); // Convert braille to character
+  characteristic.writeValue(letter);
   Serial.print("Dots read: ");
+  Serial.print(letter); // Print the character received
+  Serial.print(", ");
   Serial.println(states, BIN); // Print the state of the dots in binary format
 }
 

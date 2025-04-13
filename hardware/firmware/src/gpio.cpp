@@ -3,7 +3,7 @@
 
 /**** Pin numbers ****/
 uint8_t dotPins[] = {4, 16, 17, 5, 18, 19};
-uint8_t dotButtonPins[] = {12, 14, 27, 26, 25, 33};
+uint8_t dotButtonPins[] = {33, 25, 26, 12, 14, 27};
 
 void initGPIO() {
     // Set all dot pins as output and set them to LOW
