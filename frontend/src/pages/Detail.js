@@ -33,8 +33,6 @@ export default function Detail() {
   
     fetchChallenge();
   
-    // Try auto-connect to known device (won’t prompt the user)
-    BluetoothManager.connect(true);
   }, [id]);
 
   // Send letter on index change if type is 2

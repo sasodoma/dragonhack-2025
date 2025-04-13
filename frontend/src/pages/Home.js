@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "../styles/Home.css";
 import FingerIcon from '../gesture-tap.svg';
 import LetterIcon from '../alpha-f-circle-outline.svg';
+import BluetoothManager from "../BluetoothManager";
 
 const colors = ["#FFE066", "#A2DED0", "#E6EE9C", "#FF6B6B", "#FFD54F"];
 
@@ -24,7 +25,7 @@ export default function Home() {
         setItems(formatted);
       })
       .catch((error) => console.error("Failed to fetch challenges", error));
-  
+
     // Get user score
     fetch("http://localhost:5000/get-user?username=mirko")
       .then((res) => res.json())
@@ -34,8 +35,13 @@ export default function Home() {
         }
       })
       .catch((error) => console.error("Failed to fetch user data", error));
+
+    // Attempt auto-connect (only for previously paired devices)
   }, []);
-  
+
+  const handleBluetoothConnect = () => {
+    BluetoothManager.connect(false); // Manual pairing flow triggered by user gesture
+  };
 
   return (
     <>
@@ -43,6 +49,10 @@ export default function Home() {
         <img src="/FT_logo.png" className="header-logo"></img>
         <h1 className="title">Hi, Mirko!</h1>
         <p className="score">Score: {score}</p>
+        <button className="bottom-connect-btn" onClick={handleBluetoothConnect}>
+          🔵 Connect
+        </button>
+
       </div>
       <div className="home-container">
         <div className="card-list">
