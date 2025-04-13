@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import BluetoothManager from "../BluetoothManager"; // Make sure this path is correct
+import BluetoothManager from "../BluetoothManager";
 import "../styles/Detail.css";
 
 export default function Detail() {
@@ -12,7 +12,6 @@ export default function Detail() {
   const [score, setScore] = useState(0);
   const [isCorrect, setIsCorrect] = useState(0);
 
-  // Sound refs
   const correctSound = useRef(new Audio("/correct.mp3"));
   const incorrectSound = useRef(new Audio("/incorrect.mp3"));
 
@@ -30,16 +29,13 @@ export default function Detail() {
         console.error("Error fetching challenge:", err);
       }
     }
-  
+
     fetchChallenge();
-  
   }, [id]);
 
-  // Send letter on index change if type is 2
   useEffect(() => {
-    if (challenge?.type === 2) {
-      const currentLetter = challenge.letters[currentIndex];
-      BluetoothManager.sendLetter(currentLetter);
+    if (challenge?.type === 2 && challenge.letters[currentIndex]) {
+      BluetoothManager.sendLetter(challenge.letters[currentIndex]);
     }
   }, [currentIndex, challenge]);
 
@@ -65,6 +61,10 @@ export default function Detail() {
       if (!isLast) {
         setCurrentIndex((prev) => prev + 1);
       } else {
+        // Send "0" if type is 2
+        if (challenge.type === 2) {
+          BluetoothManager.sendLetter("0");
+        }
         navigate("/results", { state: { score: isAnswerCorrect ? score + 1 : score } });
       }
     }, 500);
@@ -91,7 +91,12 @@ export default function Detail() {
         ) : (
           <button
             className="confirm-button"
-            onClick={() => navigate("/results", { state: { score } })}
+            onClick={() => {
+              if (challenge.type === 2) {
+                BluetoothManager.sendLetter("0");
+              }
+              navigate("/results", { state: { score } });
+            }}
           >
             Confirm & Continue
           </button>

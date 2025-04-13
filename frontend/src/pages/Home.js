@@ -10,6 +10,7 @@ const colors = ["#FFE066", "#A2DED0", "#E6EE9C", "#FF6B6B", "#FFD54F"];
 export default function Home() {
   const [items, setItems] = useState([]);
   const [score, setScore] = useState(0);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     // Get challenges
@@ -36,30 +37,41 @@ export default function Home() {
       })
       .catch((error) => console.error("Failed to fetch user data", error));
 
-    // Attempt auto-connect (only for previously paired devices)
+    // Optionally check connection status on load
+    BluetoothManager.isConnected?.().then(setIsConnected).catch(() => {});
   }, []);
 
   const handleBluetoothConnect = () => {
-    BluetoothManager.connect(false); // Manual pairing flow triggered by user gesture
+    BluetoothManager.connect(false)
+      .then(() => {
+        setIsConnected(true);
+      })
+      .catch(() => {
+        setIsConnected(false);
+        console.error("Bluetooth connection failed");
+      });
   };
 
   return (
     <>
-      <div className="home-header" >
-        <img src="/FT_logo.png" className="header-logo"></img>
+      <div className="home-header">
+        <img src="/FT_logo.png" className="header-logo" alt="Logo" />
         <h1 className="title">Hi, Mirko!</h1>
         <p className="score">Score: {score}</p>
         <button className="bottom-connect-btn" onClick={handleBluetoothConnect}>
-          🔵 Connect
+          {isConnected ? "✅ Connected" : "🔵 Connect"}
         </button>
-
       </div>
       <div className="home-container">
         <div className="card-list">
           {items.map((item) => (
             <Link to={`/item/${item.id}`} key={item.id} className="card-link">
               <div className="card" style={{ backgroundColor: item.color }}>
-                <img src={item.type === 1 ? LetterIcon : FingerIcon} alt="class" className="card-image" />
+                <img
+                  src={item.type === 1 ? LetterIcon : FingerIcon}
+                  alt="class"
+                  className="card-image"
+                />
                 <div className="card-content">
                   <h2 className="card-title">{item.title}</h2>
                   <p className="card-sub">{item.type === 1 ? "Type" : "Feel"}</p>
