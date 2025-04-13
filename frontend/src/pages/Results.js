@@ -6,8 +6,8 @@ export default function Results() {
   const { score } = location.state || { score: 0 };
 
   const getFeedback = (score) => {
-    if (score >= 4) return "Excellent job! 🎉";
-    if (score >= 3) return "Good effort! 💪";
+    if (score >= 2) return "Excellent job! 🦆";
+    if (score >= 1) return "Good effort! 💪";
     return "Keep practicing! 🌱";
   };
 

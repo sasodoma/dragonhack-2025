@@ -56,8 +56,7 @@ export default function Home() {
     <>
       <div className="home-header">
         <img src="/FT_logo.png" className="header-logo" alt="Logo" />
-        <h1 className="title">Mirko!</h1>
-        <p className="score">Score: {score}</p>
+        <p className="score">Hi, Mirko!</p>
         <button className="bottom-connect-btn" onClick={handleBluetoothConnect}>
           {isConnected ? "✅ Connected" : "🔵 Connect"}
         </button>
