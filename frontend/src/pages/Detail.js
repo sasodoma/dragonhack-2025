@@ -75,6 +75,13 @@ export default function Detail() {
     };
   }, [challenge, currentIndex, navigate, score]);
   
+  useEffect(() => {
+    if (challenge && challenge.type === 1)
+    {
+      const audio = new Audio("/Alphabet/" + challenge.letters[currentIndex] + ".wav");
+      audio.play();
+    }
+  }, [challenge, currentIndex]);
 
   const isLast = challenge && currentIndex === challenge.letters.length - 1;
 
